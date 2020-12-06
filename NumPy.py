@@ -445,6 +445,13 @@ randint.mean()
 # In[ ]:
 
 
+print(randint.mean(0)) # columns
+print(randint.mean(1)) # rows
+
+
+# In[ ]:
+
+
 randint.std()
 
 
