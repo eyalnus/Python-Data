@@ -690,9 +690,9 @@ print(years)
 
 dates = []
 extents = {"n":[], "s":[]}
-for y in years[1:]:
-    nind = np.where(n_date < y)
-    sind = np.where(s_date < y)
+for y in years:
+    nind = np.where(n_date.astype('datetime64[Y]') == y)
+    sind = np.where(s_date.astype('datetime64[Y]') == y)
     dates.append(n_date[nind ])
     extents["s"].append(s_extent[sind].mean())
     extents["n"].append(n_extent[nind].mean())
@@ -705,8 +705,8 @@ print(extents["s"])
 
 
 fig=plt.figure(figsize=(12, 6))
-plt.plot(years[2:],extents["n"][1:],label='Northern Hemisphere') # the first year has only partial data so we ignore it
-plt.plot(years[2:],extents["s"][1:],label='Southern  Hemisphere')
+plt.plot(years[1:],extents["n"][1:],label='Northern Hemisphere') # the first year has only partial data so we ignore it
+plt.plot(years[1:],extents["s"][1:],label='Southern  Hemisphere')
 plt.legend(bbox_to_anchor=(0., -.362, 1., .102), loc=3, ncol=2, 
            mode="expand", borderaxespad=0.)
 
@@ -784,8 +784,9 @@ print(ice_array.dtype)
 
 averages =  {"n":[], "s":[]}
 for y in years[1:]:
-    averages["n"].append(ice_array[(ice_array['date']<y) & (ice_array['hemisphere']=="north")]['extent'].mean())
-    averages["s"].append(ice_array[(ice_array['date']<y) & (ice_array['hemisphere']=="south")]['extent'].mean())
+    year = (ice_array['date'].astype('datetime64[Y]') == y)
+    averages["n"].append(ice_array[ year & (ice_array['hemisphere']=="north")]['extent'].mean())
+    averages["s"].append(ice_array[ year & (ice_array['hemisphere']=="south")]['extent'].mean())
 print(averages["n"])
 print(averages["s"])
 
@@ -794,8 +795,14 @@ print(averages["s"])
 
 
 fig=plt.figure(figsize=(12, 6))
-plt.plot(years[2:],averages["n"][1:],label='Northern Hemisphere') # the first year has only partial data so we ignore it
-plt.plot(years[2:],averages["s"][1:],label='Southern  Hemisphere')
+plt.plot(years[1:-1],averages["n"][1:],label='Northern Hemisphere') # the first year has only partial data so we ignore it
+plt.plot(years[1:-1],averages["s"][1:],label='Southern  Hemisphere')
 plt.legend(bbox_to_anchor=(0., -.362, 1., .102), loc=3, ncol=2, 
            mode="expand", borderaxespad=0.)
+
+
+# In[ ]:
+
+
+
 
